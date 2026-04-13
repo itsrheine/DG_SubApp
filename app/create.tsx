@@ -7,6 +7,13 @@ export default function CreateScreen() {
   const router = useRouter();
   const [affirmation, setAffirmation] = useState("");
 
+  const hasText = affirmation.trim().length > 0;
+
+  const handleSave = () => {
+    alert("Affirmation saved: " + affirmation);
+    router.back();
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.heading}>New Affirmation</Text>
@@ -20,6 +27,14 @@ export default function CreateScreen() {
         onChangeText={setAffirmation}
         multiline
       />
+
+      <TouchableOpacity
+        style={[styles.saveButton, !hasText && styles.saveButtonDisabled]}
+        onPress={handleSave}
+        disabled={!hasText}
+      >
+        <Text style={styles.saveButtonText}>Save Affirmation</Text>
+      </TouchableOpacity>
 
       <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
         <Text style={styles.backText}>Go Back</Text>
@@ -57,6 +72,21 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: Colors.light.text,
     textAlignVertical: "top",
+  },
+  saveButton: {
+    width: "100%",
+    backgroundColor: Colors.light.tint,
+    paddingVertical: 14,
+    borderRadius: 30,
+    alignItems: "center",
+  },
+  saveButtonDisabled: {
+    opacity: 0.3,
+  },
+  saveButtonText: {
+    color: "#ffffff",
+    fontSize: 16,
+    fontWeight: "bold",
   },
   backButton: {
     paddingVertical: 12,
