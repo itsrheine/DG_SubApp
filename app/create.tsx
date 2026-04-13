@@ -1,4 +1,5 @@
 import { Colors } from "@/constants/theme";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
@@ -9,8 +10,11 @@ export default function CreateScreen() {
 
   const hasText = affirmation.trim().length > 0;
 
-  const handleSave = () => {
-    alert("Affirmation saved: " + affirmation);
+  const handleSave = async () => {
+    const existing = await AsyncStorage.getItem("affirmations");
+    const list = existing ? JSON.parse(existing) : [];
+    list.push(affirmation.trim());
+    await AsyncStorage.setItem("affirmations", JSON.stringify(list));
     router.back();
   };
 
