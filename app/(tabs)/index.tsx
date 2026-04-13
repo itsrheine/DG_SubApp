@@ -1,16 +1,23 @@
 import { Colors } from "@/constants/theme";
-import { useRouter } from "expo-router";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useFocusEffect, useRouter } from "expo-router";
+import { useCallback, useState } from "react";
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-
-const sampleAffirmations = [
-  "I am confident and calm",
-  "I deserve good things",
-  "I am growing every day",
-  "I trust the process",
-];
 
 export default function HomeScreen() {
   const router = useRouter();
+  const [affirmations, setAffirmations] = useState<string[]>([]);
+
+  useFocusEffect(
+    useCallback(() => {
+      const load = async () => {
+        const stored = await AsyncStorage.getItem("affirmations");
+        const list = stored ? JSON.parse(stored) : [];
+        setAffirmations(list);
+      };
+      load();
+    }, [])
+  );
 
   return (
     <View style={styles.container}>
@@ -18,11 +25,18 @@ export default function HomeScreen() {
       <Text style={styles.subheading}>Your daily affirmations</Text>
 
       <ScrollView style={styles.list} showsVerticalScrollIndicator={false}>
-        {sampleAffirmations.map((item, index) => (
-          <View key={index} style={styles.card}>
-            <Text style={styles.cardText}>{item}</Text>
+        {affirmations.length === 0 ? (
+          <View style={styles.empty}>
+            <Text style={styles.emptyText}>No affirmations yet.</Text>
+            <Text style={styles.emptySubtext}>Tap the button below to add your first one.</Text>
           </View>
-        ))}
+        ) : (
+          affirmations.map((item, index) => (
+            <View key={index} style={styles.card}>
+              <Text style={styles.cardText}>{item}</Text>
+            </View>
+          ))
+        )}
       </ScrollView>
 
       <TouchableOpacity
@@ -68,6 +82,21 @@ const styles = StyleSheet.create({
     color: Colors.light.text,
     fontSize: 16,
     lineHeight: 24,
+  },
+  empty: {
+    alignItems: "center",
+    paddingTop: 60,
+    gap: 8,
+  },
+  emptyText: {
+    color: Colors.light.text,
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+  emptySubtext: {
+    color: Colors.light.icon,
+    fontSize: 14,
+    textAlign: "center",
   },
   button: {
     backgroundColor: Colors.light.tint,
