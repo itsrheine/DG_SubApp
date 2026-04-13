@@ -1,10 +1,26 @@
 import { Colors } from "@/constants/theme";
 import { useLocalSearchParams, useRouter } from "expo-router";
+import * as Speech from "expo-speech";
+import { useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 export default function AffirmationScreen() {
   const router = useRouter();
   const { title, text } = useLocalSearchParams<{ title: string; text: string }>();
+  const [isSpeaking, setIsSpeaking] = useState(false);
+
+  const handlePlay = () => {
+    if (isSpeaking) {
+      Speech.stop();
+      setIsSpeaking(false);
+    } else {
+      setIsSpeaking(true);
+      Speech.speak(text as string, {
+        onDone: () => setIsSpeaking(false),
+        onStopped: () => setIsSpeaking(false),
+      });
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -13,6 +29,15 @@ export default function AffirmationScreen() {
         <Text style={styles.title}>{title}</Text>
         <Text style={styles.text}>{text}</Text>
       </View>
+
+      <TouchableOpacity
+        style={[styles.playButton, isSpeaking && styles.playButtonActive]}
+        onPress={handlePlay}
+      >
+        <Text style={styles.playButtonText}>
+          {isSpeaking ? "Stop" : "▶  Play"}
+        </Text>
+      </TouchableOpacity>
 
       <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
         <Text style={styles.backText}>Go Back</Text>
@@ -57,6 +82,21 @@ const styles = StyleSheet.create({
     color: Colors.light.icon,
     textAlign: "center",
     lineHeight: 28,
+  },
+  playButton: {
+    width: "100%",
+    backgroundColor: Colors.light.tint,
+    paddingVertical: 16,
+    borderRadius: 30,
+    alignItems: "center",
+  },
+  playButtonActive: {
+    backgroundColor: "#ef4444",
+  },
+  playButtonText: {
+    color: "#ffffff",
+    fontSize: 16,
+    fontWeight: "bold",
   },
   backButton: {
     paddingVertical: 12,
