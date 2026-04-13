@@ -1,6 +1,8 @@
 # DG_SubApp
 practice wellness app for daily affirmations
+
 ---
+
 ## Tech Stack
 
 **Front End**
@@ -10,26 +12,43 @@ practice wellness app for daily affirmations
 - TypeScript
 
 **Back End / Database**
-- Not yet implemented
+- AsyncStorage (on-device persistence)
 
 **State & UI**
 - React useState
 - StyleSheet (React Native)
 
 ---
+
 ## Features
 
-- Home screen with app branding
-- Navigate to a Create screen
-- Type a custom affirmation using a text input
-- Color pallet defined in a central theme file
+- Home screen displaying all saved affirmations
+- Create screen with title and affirmation text inputs
+- Affirmations saved to device storage and persist between sessions
+- Delete affirmations from the home screen
+- Detail screen to view a full affirmation
+- Text-to-speech playback using the device's built-in voice
+- Repeat control - play an affirmation 1x, 3x, 5x, or 10x in a row
+- Central color theme defined in constants/theme.ts
+   - Background: #0d0620
+   - Primary: #a78bfa
 
 ---
+
+## Screens
+| Screen | File | Purpose |
+|---|---|---|
+| Home | app/(tabs)/index.tsx | Lists all affirmations |
+| Create | app/create.tsx | Add a new affirmation |
+| Detail | app/affirmation.tsx | View and play an affirmation |
+
+---
+
 ## In Progress
 
-- Saving affirmations
-- Playback screen
-- Scheduling daily reminders
+- Scheduling daily reminds
+- Edit existing affirmations
+- Multiple affirmation tracks
 
 ---
 
@@ -74,4 +93,5 @@ npx expo start
 
 <p align="center">
   <img src="./assets/screenshots/main page.jpg" height="400" />
+  <img src="./assets/screenshots/create page.jpg" height="400" />
 </p>

@@ -1,27 +1,39 @@
 import { Colors } from "@/constants/theme";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { useState } from "react";
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 
 export default function CreateScreen() {
   const router = useRouter();
-  const [title, setTitle] = useState("");
-  const [affirmation, setAffirmation] = useState("");
+  const params = useLocalSearchParams<{ title?: string; text?: string; index?: string }>();
+
+  const isEditing = params.index !== undefined;
+
+  const [title, setTitle] = useState(params.title ?? "");
+  const [affirmation, setAffirmation] = useState(params.text ?? "");
 
   const hasContent = title.trim().length > 0 && affirmation.trim().length > 0;
 
   const handleSave = async () => {
     const existing = await AsyncStorage.getItem("affirmations");
     const list = existing ? JSON.parse(existing) : [];
-    list.push({ title: title.trim(), text: affirmation.trim() });
+
+    if (isEditing) {
+      list[Number(params.index)] = { title: title.trim(), text: affirmation.trim() };
+    } else {
+      list.push({ title: title.trim(), text: affirmation.trim() });
+    }
+
     await AsyncStorage.setItem("affirmations", JSON.stringify(list));
     router.back();
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.heading}>New Affirmation</Text>
+      <Text style={styles.heading}>
+        {isEditing ? "Edit Affirmation" : "New Affirmation"}
+      </Text>
       <Text style={styles.subheading}>Write something kind to yourself</Text>
 
       <TextInput
@@ -46,7 +58,9 @@ export default function CreateScreen() {
         onPress={handleSave}
         disabled={!hasContent}
       >
-        <Text style={styles.saveButtonText}>Save Affirmation</Text>
+        <Text style={styles.saveButtonText}>
+          {isEditing ? "Update Affirmation" : "Save Affirmation"}
+        </Text>
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>

@@ -51,7 +51,7 @@ export default function HomeScreen() {
                 onPress={() =>
                   router.push({
                     pathname: "/affirmation",
-                    params: { title: item.title, text: item.text },
+                    params: { title: item.title, text: item.text, index },
                   })
                 }
               >
