@@ -6,7 +6,12 @@ import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-nati
 
 export default function HomeScreen() {
   const router = useRouter();
-  const [affirmations, setAffirmations] = useState<string[]>([]);
+  type Affirmation = {
+    title: string;
+    text: string;
+  };
+
+  const [affirmations, setAffirmations] = useState<Affirmation[]>([]);
 
   useFocusEffect(
     useCallback(() => {
@@ -39,17 +44,27 @@ export default function HomeScreen() {
             </Text>
           </View>
         ) : (
-          affirmations.map((item, index) => (
-            <View key={index} style={styles.card}>
-              <Text style={styles.cardText}>{item}</Text>
+          affirmations.map((item: Affirmation, index: number) => (
               <TouchableOpacity
-                style={styles.deleteButton}
-                onPress={() => handleDelete(index)}
+                key={index}
+                style={styles.card}
+                onPress={() =>
+                  router.push({
+                    pathname: "/affirmation",
+                    params: { title: item.title, text: item.text },
+                  })
+                }
               >
-                <Text style={styles.deleteText}>Remove</Text>
+                <Text style={styles.cardTitle}>{item.title}</Text>
+                <Text style={styles.cardText}>{item.text}</Text>
+                <TouchableOpacity
+                  style={styles.deleteButton}
+                  onPress={() => handleDelete(index)}
+                >
+                  <Text style={styles.deleteText}>Remove</Text>
+                </TouchableOpacity>
               </TouchableOpacity>
-            </View>
-          ))
+            ))
         )}
       </ScrollView>
 
@@ -133,4 +148,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
   },
+  cardTitle: {
+    color: Colors.light.tint,
+    fontSize: 13,
+    fontWeight: "bold",
+    marginBottom: 6,
+    textTransform: "uppercase",
+    letterSpacing: 1,
+  }
 });

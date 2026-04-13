@@ -6,14 +6,15 @@ import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-nativ
 
 export default function CreateScreen() {
   const router = useRouter();
+  const [title, setTitle] = useState("");
   const [affirmation, setAffirmation] = useState("");
 
-  const hasText = affirmation.trim().length > 0;
+  const hasContent = title.trim().length > 0 && affirmation.trim().length > 0;
 
   const handleSave = async () => {
     const existing = await AsyncStorage.getItem("affirmations");
     const list = existing ? JSON.parse(existing) : [];
-    list.push(affirmation.trim());
+    list.push({ title: title.trim(), text: affirmation.trim() });
     await AsyncStorage.setItem("affirmations", JSON.stringify(list));
     router.back();
   };
@@ -25,6 +26,14 @@ export default function CreateScreen() {
 
       <TextInput
         style={styles.input}
+        placeholder="Title e.g. Morning Boost"
+        placeholderTextColor={Colors.light.icon}
+        value={title}
+        onChangeText={setTitle}
+      />
+
+      <TextInput
+        style={[styles.input, styles.textArea]}
         placeholder="I am confident and calm..."
         placeholderTextColor={Colors.light.icon}
         value={affirmation}
@@ -33,9 +42,9 @@ export default function CreateScreen() {
       />
 
       <TouchableOpacity
-        style={[styles.saveButton, !hasText && styles.saveButtonDisabled]}
+        style={[styles.saveButton, !hasContent && styles.saveButtonDisabled]}
         onPress={handleSave}
-        disabled={!hasText}
+        disabled={!hasContent}
       >
         <Text style={styles.saveButtonText}>Save Affirmation</Text>
       </TouchableOpacity>
@@ -67,7 +76,6 @@ const styles = StyleSheet.create({
   },
   input: {
     width: "100%",
-    minHeight: 120,
     backgroundColor: Colors.light.background,
     borderWidth: 1,
     borderColor: Colors.light.tint,
@@ -75,6 +83,9 @@ const styles = StyleSheet.create({
     padding: 16,
     fontSize: 16,
     color: Colors.light.text,
+  },
+  textArea: {
+    minHeight: 120,
     textAlignVertical: "top",
   },
   saveButton: {
