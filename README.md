@@ -1,50 +1,77 @@
-# Welcome to your Expo app 👋
+# DG_SubApp
+practice wellness app for daily affirmations
+---
+## Tech Stack
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+**Front End**
+- React Native
+- Expo
+- Expo Router
+- TypeScript
 
-## Get started
+**Back End / Database**
+- Not yet implemented
 
-1. Install dependencies
+**State & UI**
+- React useState
+- StyleSheet (React Native)
 
-   ```bash
-   npm install
-   ```
+---
+## Features
 
-2. Start the app
+- Home screen with app branding
+- Navigate to a Create screen
+- Type a custom affirmation using a text input
+- Color pallet defined in a central theme file
 
-   ```bash
-   npx expo start
-   ```
+---
+## In Progress
 
-In the output, you'll find options to open the app in a
+- Saving affirmations
+- Playback screen
+- Scheduling daily reminders
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+---
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## Known Issues & Improvements
 
-## Get a fresh project
+This project is actively being developed.
 
-When you're ready, run:
+Issues and feature requests:
+https://github.com/itsrheine/DG_SubApp
+
+---
+
+## Get Started
+
+1. Clone the repository
+
+git clone https://github.com/itsrheine/DG_SubApp.git
+
+2. Go into the project folder
 
 ```bash
-npm run reset-project
+cd DG_SubApp
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+3. Install dependencies
 
-## Learn more
+```bash
+npm install
+```
 
-To learn more about developing your project with Expo, look at the following resources:
+4. Start the app
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+```bash
+npx expo start
+```
 
-## Join the community
+5. Download **Expo Go** on your phone and scan the QR code to preview the app
 
-Join our community of developers creating universal apps.
+---
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+### Screenshots
+
+<p align="center">
+  <img src="./assets/screenshots/main page.jpg" height="400" />
+</p>
