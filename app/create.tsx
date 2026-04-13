@@ -1,4 +1,4 @@
-import { Colors } from "@/constants/theme";
+import { Colors, Fonts } from "@/constants/theme";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useState } from "react";
@@ -71,24 +71,17 @@ export default function CreateScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: Colors.light.background,
-    gap: 16,
-    padding: 24,
-  },
-  heading: {
+    heading: {
     fontSize: 28,
-    fontWeight: "bold",
+    fontFamily: Fonts.bold,
     color: Colors.light.text,
-  },
-  subheading: {
+    },
+    subheading: {
     fontSize: 15,
+    fontFamily: Fonts.regular,
     color: Colors.light.icon,
-  },
-  input: {
+    },
+    input: {
     width: "100%",
     backgroundColor: Colors.light.background,
     borderWidth: 1,
@@ -96,7 +89,27 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     padding: 16,
     fontSize: 16,
+    fontFamily: Fonts.regular,
     color: Colors.light.text,
+    },
+    saveButtonText: {
+    color: "#ffffff",
+    fontFamily: Fonts.bold,
+    fontSize: 16,
+    },
+    backText: {
+    color: Colors.light.tint,
+    fontFamily: Fonts.semiBold,
+    fontSize: 15,
+    },
+
+  container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: Colors.light.background,
+    gap: 16,
+    padding: 24,
   },
   textArea: {
     minHeight: 120,
@@ -112,21 +125,11 @@ const styles = StyleSheet.create({
   saveButtonDisabled: {
     opacity: 0.3,
   },
-  saveButtonText: {
-    color: "#ffffff",
-    fontSize: 16,
-    fontWeight: "bold",
-  },
   backButton: {
     paddingVertical: 12,
     paddingHorizontal: 28,
     borderRadius: 30,
     borderWidth: 1,
     borderColor: Colors.light.tint,
-  },
-  backText: {
-    color: Colors.light.tint,
-    fontSize: 15,
-    fontWeight: "bold",
   },
 });

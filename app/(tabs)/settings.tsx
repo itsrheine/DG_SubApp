@@ -1,4 +1,4 @@
-import { Colors } from "@/constants/theme";
+import { Colors, Fonts } from "@/constants/theme";
 import * as Notifications from "expo-notifications";
 import { useState } from "react";
 import { StyleSheet, Switch, Text, TouchableOpacity, View } from "react-native";
@@ -131,11 +131,12 @@ const styles = StyleSheet.create({
   },
   heading: {
     fontSize: 32,
-    fontWeight: "bold",
+    fontFamily: Fonts.bold,
     color: Colors.light.text,
   },
   subheading: {
     fontSize: 16,
+    fontFamily: Fonts.regular,
     color: Colors.light.icon,
     marginTop: -12,
   },
@@ -144,8 +145,8 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     color: Colors.light.text,
+    fontFamily: Fonts.semiBold,
     fontSize: 15,
-    fontWeight: "bold",
   },
   timeGrid: {
     flexDirection: "row",
@@ -164,8 +165,8 @@ const styles = StyleSheet.create({
   },
   timeOptionText: {
     color: Colors.light.tint,
+    fontFamily: Fonts.semiBold,
     fontSize: 14,
-    fontWeight: "bold",
   },
   timeOptionTextActive: {
     color: "#ffffff",
@@ -185,11 +186,12 @@ const styles = StyleSheet.create({
   },
   rowTitle: {
     color: Colors.light.text,
+    fontFamily: Fonts.semiBold,
     fontSize: 16,
-    fontWeight: "bold",
   },
   rowSubtitle: {
     color: Colors.light.icon,
+    fontFamily: Fonts.regular,
     fontSize: 13,
   },
   statusBox: {
@@ -200,6 +202,7 @@ const styles = StyleSheet.create({
   },
   statusText: {
     color: Colors.light.icon,
+    fontFamily: Fonts.regular,
     fontSize: 13,
     textAlign: "center",
   },

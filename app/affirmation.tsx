@@ -1,4 +1,4 @@
-import { Colors } from "@/constants/theme";
+import { Colors, Fonts } from "@/constants/theme";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import * as Speech from "expo-speech";
 import { useRef, useState } from "react";
@@ -102,6 +102,35 @@ export default function AffirmationScreen() {
 }
 
 const styles = StyleSheet.create({
+    label: {
+        fontSize: 11,
+        fontFamily: Fonts.bold,
+        color: Colors.light.tint,
+        letterSpacing: 2,
+    },
+    title: {
+        fontSize: 24,
+        fontFamily: Fonts.bold,
+        color: Colors.light.text,
+        textAlign: "center",
+    },
+    text: {
+        fontSize: 18,
+        fontFamily: Fonts.regular,
+        color: Colors.light.icon,
+        textAlign: "center",
+        lineHeight: 28,
+    },
+    playButtonText: {
+        color: "#ffffff",
+        fontFamily: Fonts.bold,
+        fontSize: 16,
+    },
+    backText: {
+        color: Colors.light.tint,
+        fontFamily: Fonts.semiBold,
+        fontSize: 15,
+    },
   container: {
     flex: 1,
     backgroundColor: Colors.light.background,
@@ -118,24 +147,6 @@ const styles = StyleSheet.create({
     padding: 32,
     alignItems: "center",
     gap: 16,
-  },
-  label: {
-    fontSize: 11,
-    fontWeight: "bold",
-    color: Colors.light.tint,
-    letterSpacing: 2,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: Colors.light.text,
-    textAlign: "center",
-  },
-  text: {
-    fontSize: 18,
-    color: Colors.light.icon,
-    textAlign: "center",
-    lineHeight: 28,
   },
   repeatRow: {
     width: "100%",
@@ -180,22 +191,12 @@ const styles = StyleSheet.create({
   playButtonActive: {
     backgroundColor: "#ef4444",
   },
-  playButtonText: {
-    color: "#ffffff",
-    fontSize: 16,
-    fontWeight: "bold",
-  },
   backButton: {
     paddingVertical: 12,
     paddingHorizontal: 28,
     borderRadius: 30,
     borderWidth: 1,
     borderColor: Colors.light.tint,
-  },
-  backText: {
-    color: Colors.light.tint,
-    fontSize: 15,
-    fontWeight: "bold",
   },
   editButton: {
     paddingVertical: 12,
