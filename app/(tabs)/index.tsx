@@ -19,6 +19,12 @@ export default function HomeScreen() {
     }, [])
   );
 
+  const handleDelete = async (index: number) => {
+    const updated = affirmations.filter((_, i) => i !== index);
+    setAffirmations(updated);
+    await AsyncStorage.setItem("affirmations", JSON.stringify(updated));
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.heading}>DG_SubApp</Text>
@@ -28,12 +34,20 @@ export default function HomeScreen() {
         {affirmations.length === 0 ? (
           <View style={styles.empty}>
             <Text style={styles.emptyText}>No affirmations yet.</Text>
-            <Text style={styles.emptySubtext}>Tap the button below to add your first one.</Text>
+            <Text style={styles.emptySubtext}>
+              Tap the button below to add your first one.
+            </Text>
           </View>
         ) : (
           affirmations.map((item, index) => (
             <View key={index} style={styles.card}>
               <Text style={styles.cardText}>{item}</Text>
+              <TouchableOpacity
+                style={styles.deleteButton}
+                onPress={() => handleDelete(index)}
+              >
+                <Text style={styles.deleteText}>Remove</Text>
+              </TouchableOpacity>
             </View>
           ))
         )}
@@ -82,6 +96,15 @@ const styles = StyleSheet.create({
     color: Colors.light.text,
     fontSize: 16,
     lineHeight: 24,
+    marginBottom: 10,
+  },
+  deleteButton: {
+    alignSelf: "flex-end",
+  },
+  deleteText: {
+    color: "#ef4444",
+    fontSize: 13,
+    fontWeight: "bold",
   },
   empty: {
     alignItems: "center",
