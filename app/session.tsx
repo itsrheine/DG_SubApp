@@ -1,6 +1,7 @@
 import { Colors, Fonts } from "@/constants/theme";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Audio } from "expo-av";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import * as Speech from "expo-speech";
 import { useEffect, useRef, useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
@@ -15,20 +16,46 @@ const INTERVAL_OPTIONS = [
   { label: "5m", value: 300000 },
 ];
 
+type Affirmation = { title: string; text: string };
+
 export default function SessionScreen() {
   const router = useRouter();
-  const { title, text } = useLocalSearchParams<{
-    title: string;
-    text: string;
-  }>();
-
   const [isPlaying, setIsPlaying] = useState(false);
   const [interval, setInterval_] = useState(30000);
+  const [affirmations, setAffirmations] = useState<Affirmation[]>([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentTitle, setCurrentTitle] = useState("");
+
   const soundRef = useRef<Audio.Sound | null>(null);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const indexRef = useRef(0);
+  const listRef = useRef<Affirmation[]>([]);
 
-  const speakAffirmation = () => {
-    Speech.speak(text as string, { rate: 0.85, pitch: 0.95 });
+  useEffect(() => {
+    const load = async () => {
+      const stored = await AsyncStorage.getItem("affirmations");
+      const list = stored ? JSON.parse(stored) : [];
+      setAffirmations(list);
+      listRef.current = list;
+      if (list.length > 0) setCurrentTitle(list[0].title);
+    };
+    load();
+
+    return () => {
+      stopSession();
+    };
+  }, []);
+
+  const speakNext = () => {
+    const list = listRef.current;
+    if (list.length === 0) return;
+
+    const item = list[indexRef.current];
+    setCurrentIndex(indexRef.current);
+    setCurrentTitle(item.title);
+
+    Speech.speak(item.text, { rate: 0.85, pitch: 0.95 });
+    indexRef.current = (indexRef.current + 1) % list.length;
   };
 
   const startSession = async () => {
@@ -41,8 +68,9 @@ export default function SessionScreen() {
     soundRef.current = sound;
     await sound.playAsync();
 
-    speakAffirmation();
-    timerRef.current = setInterval(speakAffirmation, interval);
+    indexRef.current = 0;
+    speakNext();
+    timerRef.current = setInterval(speakNext, interval);
     setIsPlaying(true);
   };
 
@@ -55,25 +83,37 @@ export default function SessionScreen() {
       soundRef.current = null;
     }
     setIsPlaying(false);
+    indexRef.current = 0;
+    setCurrentIndex(0);
+    if (listRef.current.length > 0) setCurrentTitle(listRef.current[0].title);
   };
 
-  useEffect(() => {
-    return () => {
-      stopSession();
-    };
-  }, []);
+  const progress = affirmations.length > 0
+    ? `${currentIndex + 1} of ${affirmations.length}`
+    : "No affirmations";
 
   return (
     <View style={styles.container}>
       <View style={styles.card}>
-        <Text style={styles.label}>SESSION</Text>
-        <Text style={styles.title}>{title}</Text>
-        <Text style={styles.text}>{text}</Text>
+        <Text style={styles.label}>NOW PLAYING</Text>
+        <Text style={styles.title}>
+          {currentTitle || "Loading..."}
+        </Text>
+        <Text style={styles.progress}>{progress}</Text>
+
+        <View style={styles.dots}>
+          {affirmations.map((_, i) => (
+            <View
+              key={i}
+              style={[styles.dot, i === currentIndex && styles.dotActive]}
+            />
+          ))}
+        </View>
       </View>
 
       {!isPlaying && (
         <View style={styles.intervalRow}>
-          <Text style={styles.intervalLabel}>Repeat every</Text>
+          <Text style={styles.intervalLabel}>Speak every</Text>
           <View style={styles.intervalOptions}>
             {INTERVAL_OPTIONS.map((opt) => (
               <TouchableOpacity
@@ -107,6 +147,7 @@ export default function SessionScreen() {
       <TouchableOpacity
         style={[styles.mainButton, isPlaying && styles.mainButtonStop]}
         onPress={isPlaying ? stopSession : startSession}
+        disabled={affirmations.length === 0}
       >
         <Text style={styles.mainButtonText}>
           {isPlaying ? "Stop Session" : "▶  Start Session"}
@@ -136,7 +177,7 @@ const styles = StyleSheet.create({
     borderRadius: 24,
     padding: 32,
     alignItems: "center",
-    gap: 16,
+    gap: 12,
   },
   label: {
     fontSize: 11,
@@ -145,17 +186,29 @@ const styles = StyleSheet.create({
     letterSpacing: 2,
   },
   title: {
-    fontSize: 24,
+    fontSize: 22,
     fontFamily: Fonts.bold,
     color: Colors.light.text,
     textAlign: "center",
   },
-  text: {
-    fontSize: 16,
+  progress: {
+    fontSize: 13,
     fontFamily: Fonts.regular,
     color: Colors.light.icon,
-    textAlign: "center",
-    lineHeight: 26,
+  },
+  dots: {
+    flexDirection: "row",
+    gap: 6,
+    marginTop: 4,
+  },
+  dot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: "#3a2d52",
+  },
+  dotActive: {
+    backgroundColor: Colors.light.tint,
   },
   intervalRow: {
     width: "100%",

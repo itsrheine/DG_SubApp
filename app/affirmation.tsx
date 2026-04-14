@@ -96,10 +96,7 @@ export default function AffirmationScreen() {
       <TouchableOpacity
         style={styles.sessionButton}
         onPress={() =>
-          router.push({
-            pathname: "/session",
-            params: { title, text },
-          })
+          router.push("/session")
         }
       >
         <Text style={styles.sessionButtonText}>▶  Start Session</Text>
