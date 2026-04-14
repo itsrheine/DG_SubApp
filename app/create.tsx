@@ -21,12 +21,13 @@ export default function CreateScreen() {
 
     if (isEditing) {
       list[Number(params.index)] = { title: title.trim(), text: affirmation.trim() };
+      await AsyncStorage.setItem("affirmations", JSON.stringify(list));
+    router.dismissAll();
     } else {
       list.push({ title: title.trim(), text: affirmation.trim() });
+      await AsyncStorage.setItem("affirmations", JSON.stringify(list));
+      router.back();
     }
-
-    await AsyncStorage.setItem("affirmations", JSON.stringify(list));
-    router.back();
   };
 
   return (
@@ -72,37 +73,36 @@ export default function CreateScreen() {
 
 const styles = StyleSheet.create({
     heading: {
-    fontSize: 28,
-    fontFamily: Fonts.bold,
-    color: Colors.light.text,
+      fontSize: 28,
+      fontFamily: Fonts.bold,
+      color: Colors.light.text,
     },
     subheading: {
-    fontSize: 15,
-    fontFamily: Fonts.regular,
-    color: Colors.light.icon,
+      fontSize: 15,
+      fontFamily: Fonts.regular,
+      color: Colors.light.icon,
     },
     input: {
-    width: "100%",
-    backgroundColor: Colors.light.background,
-    borderWidth: 1,
-    borderColor: Colors.light.tint,
-    borderRadius: 16,
-    padding: 16,
-    fontSize: 16,
-    fontFamily: Fonts.regular,
-    color: Colors.light.text,
+      width: "100%",
+      backgroundColor: Colors.light.background,
+      borderWidth: 1,
+      borderColor: Colors.light.tint,
+      borderRadius: 16,
+      padding: 16,
+      fontSize: 16,
+      fontFamily: Fonts.regular,
+      color: Colors.light.text,
     },
     saveButtonText: {
-    color: "#ffffff",
-    fontFamily: Fonts.bold,
-    fontSize: 16,
+      color: "#ffffff",
+      fontFamily: Fonts.bold,
+      fontSize: 16,
     },
     backText: {
-    color: Colors.light.tint,
-    fontFamily: Fonts.semiBold,
-    fontSize: 15,
+      color: Colors.light.tint,
+      fontFamily: Fonts.semiBold,
+      fontSize: 15,
     },
-
   container: {
     flex: 1,
     alignItems: "center",
