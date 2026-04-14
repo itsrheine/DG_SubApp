@@ -6,8 +6,24 @@ import * as Speech from "expo-speech";
 import { useEffect, useRef, useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
-const AMBIENT_URL =
-  "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3";
+const TRACKS = [
+  {
+    label: "Rain",
+    uri: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+  },
+  {
+    label: "Ocean",
+    uri: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
+  },
+  {
+    label: "Soft Tone",
+    uri: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3",
+  },
+  {
+    label: "Piano",
+    uri: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3",
+  },
+];
 
 const INTERVAL_OPTIONS = [
   { label: "30s", value: 30000 },
@@ -30,6 +46,8 @@ export default function SessionScreen() {
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const indexRef = useRef(0);
   const listRef = useRef<Affirmation[]>([]);
+
+  const [selectedTrack, setSelectedTrack] = useState(TRACKS[0]);
 
   useEffect(() => {
     const load = async () => {
@@ -62,7 +80,7 @@ export default function SessionScreen() {
     await Audio.setAudioModeAsync({ playsInSilentModeIOS: true });
 
     const { sound } = await Audio.Sound.createAsync(
-      { uri: AMBIENT_URL },
+      { uri: selectedTrack.uri },
       { isLooping: true, volume: 0.4 }
     );
     soundRef.current = sound;
@@ -108,6 +126,31 @@ export default function SessionScreen() {
               style={[styles.dot, i === currentIndex && styles.dotActive]}
             />
           ))}
+        </View>
+      </View>
+
+      <View style={styles.intervalRow}>
+        <Text style={styles.intervalLabel}>Background sound</Text>
+        <View style={styles.intervalOption}>
+            {TRACKS.map((track) => (
+                <TouchableOpacity
+                    key={track.label}
+                    style={[
+                        styles.intervalOption,
+                        selectedTrack.label === track.label && styles.intervalOptionActive,
+                    ]}
+                    onPress={() => setSelectedTrack(track)}
+                >
+                <Text
+                    style={[
+                        styles.intervalOptionText,
+                        selectedTrack.label === track.label && styles.intervalOptionTextActive,
+                    ]}
+                >
+                    {track.label}
+                </Text>
+                </TouchableOpacity>
+            ))}
         </View>
       </View>
 
