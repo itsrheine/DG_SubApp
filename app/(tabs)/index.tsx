@@ -1,4 +1,5 @@
-import { Colors } from "@/constants/theme";
+import { Colors, Fonts } from "@/constants/theme";
+import { updateStreak } from "@/utils/streak";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect, useRouter } from "expo-router";
 import { useCallback, useState } from "react";
@@ -12,6 +13,7 @@ export default function HomeScreen() {
   };
 
   const [affirmations, setAffirmations] = useState<Affirmation[]>([]);
+  const [streak, setStreak] = useState(0);
 
   useFocusEffect(
     useCallback(() => {
@@ -19,6 +21,9 @@ export default function HomeScreen() {
         const stored = await AsyncStorage.getItem("affirmations");
         const list = stored ? JSON.parse(stored) : [];
         setAffirmations(list);
+
+        const currentStreak = await updateStreak();
+        setStreak(currentStreak);
       };
       load();
     }, [])
@@ -34,7 +39,9 @@ export default function HomeScreen() {
     <View style={styles.container}>
       <Text style={styles.heading}>DG_SubApp</Text>
       <Text style={styles.subheading}>Your daily affirmations</Text>
-
+      <View style={styles.streakBadge}>
+        <Text style={styles.streakText}>🔥 {streak} day{streak !== 1 ? "s" : ""} in a row</Text>
+      </View>
       <ScrollView style={styles.list} showsVerticalScrollIndicator={false}>
         {affirmations.length === 0 ? (
           <View style={styles.empty}>
@@ -155,5 +162,18 @@ const styles = StyleSheet.create({
     marginBottom: 6,
     textTransform: "uppercase",
     letterSpacing: 1,
+  },
+  streakBadge: {
+    alignSelf: "flex-start",
+    backgroundColor: "#1a0f2e",
+    paddingVertical: 6,
+    paddingHorizontal: 14,
+    borderRadius: 20,
+    marginBottom: 20,
+  },
+  streakText: {
+    color: Colors.light.tint,
+    fontFamily: Fonts.semiBold,
+    fontSize: 13,
   }
 });

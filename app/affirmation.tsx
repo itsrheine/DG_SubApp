@@ -2,13 +2,17 @@ import { Colors, Fonts } from "@/constants/theme";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import * as Speech from "expo-speech";
 import { useRef, useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Share, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 const REPEAT_OPTIONS = [1, 3, 5, 10];
 
 export default function AffirmationScreen() {
   const router = useRouter();
-  const { title, text, index } = useLocalSearchParams<{ title: string; text: string; index:string; }>();
+  const { title, text, index } = useLocalSearchParams<{
+    title: string;
+    text: string;
+    index: string;
+  }>();
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [repeatCount, setRepeatCount] = useState(1);
   const timesLeftRef = useRef(0);
@@ -39,6 +43,12 @@ export default function AffirmationScreen() {
       setIsSpeaking(true);
       speakOnce();
     }
+  };
+
+  const handleShare = async () => {
+    await Share.share({
+      message: `${title}\n\n${text}`,
+    });
   };
 
   return (
@@ -83,54 +93,20 @@ export default function AffirmationScreen() {
         </Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
-        <Text style={styles.backText}>Go Back</Text>
-      </TouchableOpacity>
+      <View style={styles.bottomRow}>
+        <TouchableOpacity style={styles.secondaryButton} onPress={() => router.back()}>
+          <Text style={styles.secondaryText}>Go Back</Text>
+        </TouchableOpacity>
 
-      <TouchableOpacity
-        style={styles.editButton}
-        onPress={() =>
-            router.push({
-                pathname: "/create",
-                params: { title, text, index },
-            })
-        }>
-        <Text style={styles.editText}>Edit</Text>
-      </TouchableOpacity>
+        <TouchableOpacity style={styles.shareButton} onPress={handleShare}>
+          <Text style={styles.shareText}>Share</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-    label: {
-        fontSize: 11,
-        fontFamily: Fonts.bold,
-        color: Colors.light.tint,
-        letterSpacing: 2,
-    },
-    title: {
-        fontSize: 24,
-        fontFamily: Fonts.bold,
-        color: Colors.light.text,
-        textAlign: "center",
-    },
-    text: {
-        fontSize: 18,
-        fontFamily: Fonts.regular,
-        color: Colors.light.icon,
-        textAlign: "center",
-        lineHeight: 28,
-    },
-    playButtonText: {
-        color: "#ffffff",
-        fontFamily: Fonts.bold,
-        fontSize: 16,
-    },
-    backText: {
-        color: Colors.light.tint,
-        fontFamily: Fonts.semiBold,
-        fontSize: 15,
-    },
   container: {
     flex: 1,
     backgroundColor: Colors.light.background,
@@ -148,6 +124,25 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 16,
   },
+  label: {
+    fontSize: 11,
+    fontFamily: Fonts.bold,
+    color: Colors.light.tint,
+    letterSpacing: 2,
+  },
+  title: {
+    fontSize: 24,
+    fontFamily: Fonts.bold,
+    color: Colors.light.text,
+    textAlign: "center",
+  },
+  text: {
+    fontSize: 18,
+    fontFamily: Fonts.regular,
+    color: Colors.light.icon,
+    textAlign: "center",
+    lineHeight: 28,
+  },
   repeatRow: {
     width: "100%",
     flexDirection: "row",
@@ -156,8 +151,8 @@ const styles = StyleSheet.create({
   },
   repeatLabel: {
     color: Colors.light.text,
+    fontFamily: Fonts.semiBold,
     fontSize: 15,
-    fontWeight: "bold",
   },
   repeatOptions: {
     flexDirection: "row",
@@ -175,8 +170,8 @@ const styles = StyleSheet.create({
   },
   repeatOptionText: {
     color: Colors.light.tint,
+    fontFamily: Fonts.semiBold,
     fontSize: 14,
-    fontWeight: "bold",
   },
   repeatOptionTextActive: {
     color: "#ffffff",
@@ -191,23 +186,39 @@ const styles = StyleSheet.create({
   playButtonActive: {
     backgroundColor: "#ef4444",
   },
-  backButton: {
+  playButtonText: {
+    color: "#ffffff",
+    fontFamily: Fonts.bold,
+    fontSize: 16,
+  },
+  bottomRow: {
+    width: "100%",
+    flexDirection: "row",
+    gap: 12,
+  },
+  secondaryButton: {
+    flex: 1,
     paddingVertical: 12,
-    paddingHorizontal: 28,
     borderRadius: 30,
     borderWidth: 1,
     borderColor: Colors.light.tint,
+    alignItems: "center",
   },
-  editButton: {
-    paddingVertical: 12,
-    paddingHorizontal: 28,
-    borderRadius: 30,
-    borderWidth: 1,
-    borderColor: Colors.light.icon,
-  },
-  editText: {
-    color: Colors.light.icon,
+  secondaryText: {
+    color: Colors.light.tint,
+    fontFamily: Fonts.semiBold,
     fontSize: 15,
-    fontWeight: "bold",
-  }
+  },
+  shareButton: {
+    flex: 1,
+    paddingVertical: 12,
+    borderRadius: 30,
+    backgroundColor: "#1a0f2e",
+    alignItems: "center",
+  },
+  shareText: {
+    color: Colors.light.text,
+    fontFamily: Fonts.semiBold,
+    fontSize: 15,
+  },
 });
