@@ -65,7 +65,9 @@ https://github.com/itsrheine/DG_SubApp
 
 1. Clone the repository
 
+```bash
 git clone https://github.com/itsrheine/DG_SubApp.git
+```
 
 2. Go into the project folder
 
