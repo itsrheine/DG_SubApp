@@ -93,6 +93,18 @@ export default function AffirmationScreen() {
         </Text>
       </TouchableOpacity>
 
+      <TouchableOpacity
+        style={styles.sessionButton}
+        onPress={() =>
+          router.push({
+            pathname: "/session",
+            params: { title, text },
+          })
+        }
+      >
+        <Text style={styles.sessionButtonText}>▶  Start Session</Text>
+      </TouchableOpacity>
+
       <View style={styles.bottomRow}>
         <TouchableOpacity style={styles.secondaryButton} onPress={() => router.back()}>
           <Text style={styles.secondaryText}>Go Back</Text>
@@ -107,6 +119,20 @@ export default function AffirmationScreen() {
 }
 
 const styles = StyleSheet.create({
+  sessionButton: {
+    width: "100%",
+    backgroundColor: "#1a0f2e",
+    borderWidth: 1,
+    borderColor: Colors.light.tint,
+    paddingVertical: 16,
+    borderRadius: 30,
+    alignItems: "center",
+  },
+  sessionButtonText: {
+    color: Colors.light.tint,
+    fontFamily: Fonts.bold,
+    fontSize: 16,
+  },
   container: {
     flex: 1,
     backgroundColor: Colors.light.background,
